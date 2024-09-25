@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head>
+    <title>Bairro Seguro</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+<div class="sticky top-0 z-40 w-full backdrop-blur flex-none transition-colors duration-500 lg:z-50 lg:border-b lg:border-slate-900/10 dark:border-slate-50/[0.06] bg-white supports-backdrop-blur:bg-white/95 dark:bg-slate-900/75">
+    <div class="max-w-8xl mx-auto">
+        <div class="py-4  mx-4">
+            <h1 class="inline-block text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight dark:text-slate-200">Bairro Seguro</h1>
+        </div>
+    </div>
+</div>
+<div class="container max-w-8xl mx-auto px-4 sm:px-6 md:px-8 mt-4">
+    <form method="GET" action="/">
+        <div class="grid gap-2 grid-cols-[33%_67%]">
+            <div class="form-control">
+                <select id="cities" name="cities" class="select select-bordered">
+                    <option value="">Municipio</option>
+                    <option th:each="city : ${cities}"
+                            th:value="${city}"
+                            th:text="${city}">
+                </select>
+            </div>
+
+            <div class="form-control">
+                <label class="input input-bordered flex items-center gap-2">
+                    <input type="text" class="grow" placeholder="Pesquise seu bairro aqui" />
+                </label>
+            </div>
+        </div>
+
+        <div class="grid gap-2 grid-cols-3 mt-4">
+            <div class="form-control">
+                <select id="month" name="month" class="select select-bordered">
+                    <option value="">Mês</option>
+                    <option th:each="month : ${months}"
+                            th:value="${month}"
+                            th:text="${month}">
+                </select>
+            </div>
+
+            <div class="form-control">
+                <select id="nature" name="nature" class="select select-bordered">
+                    <option value="">Natureza</option>
+                    <option th:each="nature : ${natures}"
+                            th:value="${nature}"
+                            th:text="${nature}">
+                </select>
+            </div>
+
+            <div class="form-control">
+                <select id="environment" name="environment" class="select select-bordered">
+                    <option value="">Ambiente</option>
+                    <option th:each="environment : ${environments}"
+                            th:value="${environment}"
+                            th:text="${environment}">
+                </select>
+            </div>
+        </div>
+
+        <div class="pt-4">
+            <button class="btn btn-active btn-default" type="submit">Buscar</button>
+        </div>
+    </form>
+</div>
+
+<div class="container max-w-8xl mx-auto px-4 sm:px-6 md:px-8 mt-4">
+    <h2 class="p-2 text-xl">Resultados</h2>
+    <div class="overflow-x-auto">
+        <table class="table table-xs">
+            <thead>
+            <tr>
+                <th>Municipio</th>
+                <td>Bairro</td>
+                <td>Natureza</td>
+                <td>Ambiente</td>
+                <td>Dia da Semana</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="crime : ${crimes}">
+                <td th:text="${crime.getMunicipality()}"></td>
+                <td th:text="${crime.getNeighborhood()}"></td>
+                <td th:text="${crime.getNature()}"></td>
+                <td th:text="${crime.getEnvironment()}"></td>
+                <td th:text="${crime.getDayOfWeek()}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

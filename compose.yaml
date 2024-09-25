@@ -1,0 +1,53 @@
+services:
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: bairroseguro
+      POSTGRES_USER: bairroseguro
+      POSTGRES_PASSWORD: bairroseguro
+    ports:
+      - "15432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=bairroseguro@bairroseguro.com
+      - PGADMIN_DEFAULT_PASSWORD=bairroseguro
+      - PGADMIN_CONFIG_SERVER_MODE=False
+      - PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED=False
+    ports:
+      - '8081:80'
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    entrypoint: /bin/sh -c "chmod 600 /pgpass; /entrypoint.sh;"
+    depends_on:
+      - db
+    user: root
+    configs:
+      - source: servers.json
+        target: /pgadmin4/servers.json
+      - source: pgpass
+        target: /pgpass
+
+configs:
+  pgpass:
+    content: db:5432:*:bairroseguro:bairroseguro
+  servers.json:
+    content: |
+      {"Servers": {"1": {
+        "Group": "Servers",
+        "Name": "Bairro Seguro Local",
+        "Host": "db",
+        "Port": 5432,
+        "MaintenanceDB": "bairroseguro",
+        "Username": "bairroseguro",
+        "PassFile": "/pgpass",
+        "SSLMode": "prefer"
+      }}}
+
+volumes:
+  pg_data:
+  pgadmin_data:
